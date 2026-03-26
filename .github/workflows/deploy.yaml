@@ -22,14 +22,18 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: Zip JAR
-        run: zip app.zip target/*.jar
+      - name: Prepare Deployment Folder
+        run: |
+          mkdir deploy
+          cp target/*.jar deploy/
+          cd deploy
+          zip -r app.zip *.jar
 
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
-          server: waws-prod-pn1-003.ftp.azurewebsites.windows.net  # from your publish profile
+          server: waws-prod-pn1-003.ftp.azurewebsites.windows.net
           username: ${{ secrets.AZURE_FTP_USERNAME }}
           password: ${{ secrets.AZURE_FTP_PASSWORD }}
-          local-dir: ./app.zip
+          local-dir: ./deploy
           remote-dir: /site/wwwroot
