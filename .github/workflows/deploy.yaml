@@ -25,6 +25,6 @@ jobs:
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: YOUR_APP_NAME
+          app-name: hello-app-spring                  # exact name from Azure portal
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: target/*.jar
+          package: target/*.jar                        # ensure your JAR is here
