@@ -3,7 +3,7 @@ name: Deploy to Azure App Service
 on:
   push:
     branches:
-      - main   # or 'develop'
+      - main
 
 jobs:
   build-and-deploy:
@@ -22,9 +22,12 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
+      - name: Zip JAR
+        run: zip app.zip target/*.jar
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
-          app-name: hello-app-spring                  # exact name from Azure portal
+          app-name: hello-app-spring
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: target/*.jar                        # ensure your JAR is here
+          package: app.zip
